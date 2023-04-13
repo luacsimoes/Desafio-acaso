@@ -8,6 +8,7 @@ export const Header = styled.View`
 
 export const Content = styled.View`
   display: flex;
+  align-items: center;
   justify-content: center;
 `;
 
@@ -31,7 +32,6 @@ export const InputEmail = styled.TextInput<{ theme: ThemeType }>`
 `;
 
 export const Label = styled.Text<{ theme: ThemeType }>`
-  margin-left: 60.5px;
   color: white;
   font-family: 'Raleway-Regular';
   font-size: 16px;

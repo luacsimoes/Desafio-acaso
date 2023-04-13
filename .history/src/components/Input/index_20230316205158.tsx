@@ -4,7 +4,7 @@ import { RightIcon, InputWrapper, InputEmail } from './styles';
 import { InputProps } from './types';
 
 const Input: React.ForwardRefRenderFunction<TextInput, InputProps> = (
-  { isPassword, rightIcon, ...props },
+  { isPassword, ...props },
   ref,
 ) => {
   const [hidePassword, setHidePassword] = useState(true);
@@ -16,7 +16,7 @@ const Input: React.ForwardRefRenderFunction<TextInput, InputProps> = (
         secureTextEntry={isPassword && hidePassword}
         ref={ref}
       />
-      {isPassword && rightIcon && (
+      {isPassword && (
         <RightIcon
           onPress={() => {
             setHidePassword(!hidePassword);

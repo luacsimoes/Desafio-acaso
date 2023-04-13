@@ -9,6 +9,7 @@ import {
   Header,
   Container,
   Content,
+  InputEmail,
   Label,
   AcasoLogo,
   LoginText,
@@ -41,7 +42,6 @@ const Login = () => {
           placeholderTextColor="gray"
           value={email}
           onChangeText={setEmail}
-          rightIcon={false}
           onSubmitEditing={handleEmailSubmitEditing}
         />
         <Label>Senha</Label>

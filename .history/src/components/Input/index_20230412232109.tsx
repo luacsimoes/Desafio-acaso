@@ -3,8 +3,12 @@ import { Image, TextInput } from 'react-native';
 import { RightIcon, InputWrapper, InputEmail } from './styles';
 import { InputProps } from './types';
 
+interface Props extends InputProps {
+  rightIcon?: JSX.Element;
+}
+
 const Input: React.ForwardRefRenderFunction<TextInput, InputProps> = (
-  { isPassword, rightIcon, ...props },
+  { isPassword, rightIcon = false, ...props },
   ref,
 ) => {
   const [hidePassword, setHidePassword] = useState(true);
@@ -16,20 +20,21 @@ const Input: React.ForwardRefRenderFunction<TextInput, InputProps> = (
         secureTextEntry={isPassword && hidePassword}
         ref={ref}
       />
-      {isPassword && rightIcon && (
-        <RightIcon
-          onPress={() => {
-            setHidePassword(!hidePassword);
-          }}
-        >
-          <Image
-            source={require('./images/eye.png')}
-            style={{
-              position: 'absolute',
+      {isPassword &&
+        rightIcon && ( // adiciona uma condição para renderizar o RightIcon se rightIcon for true
+          <RightIcon
+            onPress={() => {
+              setHidePassword(!hidePassword);
             }}
-          />
-        </RightIcon>
-      )}
+          >
+            <Image
+              source={require('./images/eye.png')}
+              style={{
+                position: 'absolute',
+              }}
+            />
+          </RightIcon>
+        )}
     </InputWrapper>
   );
 };

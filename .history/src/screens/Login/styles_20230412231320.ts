@@ -8,7 +8,7 @@ export const Header = styled.View`
 
 export const Content = styled.View`
   display: flex;
-  justify-content: center;
+  align-items: center;
 `;
 
 export const Container = styled.View`

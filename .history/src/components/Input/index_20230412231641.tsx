@@ -3,7 +3,11 @@ import { Image, TextInput } from 'react-native';
 import { RightIcon, InputWrapper, InputEmail } from './styles';
 import { InputProps } from './types';
 
-const Input: React.ForwardRefRenderFunction<TextInput, InputProps> = (
+interface Props extends InputProps {
+  rightIcon?: JSX.Element;
+}
+
+const Input: React.ForwardRefRenderFunction<TextInput, Props> = (
   { isPassword, rightIcon, ...props },
   ref,
 ) => {
@@ -22,12 +26,7 @@ const Input: React.ForwardRefRenderFunction<TextInput, InputProps> = (
             setHidePassword(!hidePassword);
           }}
         >
-          <Image
-            source={require('./images/eye.png')}
-            style={{
-              position: 'absolute',
-            }}
-          />
+          {rightIcon}
         </RightIcon>
       )}
     </InputWrapper>

@@ -9,6 +9,7 @@ import {
   Header,
   Container,
   Content,
+  InputEmail,
   Label,
   AcasoLogo,
   LoginText,
