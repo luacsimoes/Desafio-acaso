@@ -56,38 +56,35 @@ export const AuthProvider: React.FC<{ children?: ReactNode }> = ({
     return AsyncStorage.removeItem('userInfo');
   }, []);
 
-  const signIn = useCallback(
-    (email: string, password: string) => {
-      axios
-        .post<AuthResponse>(`${BASE_URL}/auth/login`, {
-          email,
-          password,
-        })
-        .then((response) => {
-          if (response && response.status === 200) {
-            const userInfo = response.data;
-            setUserInfo(userInfo);
-            AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
-          }
-        })
-        .catch((error) => {
-          if (error.response && error.response.code === 'ERR.1.0002') {
-            Toast.show({
-              type: 'error',
-              text1: 'E-mail ou senha inválidos',
-            });
-          } else if (error.response && error.response.code === 'ERR.1.0001') {
-            navigation.navigate('ConfirmEmail', { email });
-          } else {
-            Toast.show({
-              type: 'error',
-              text1: 'Algo deu errado, tente novamente mais tarde',
-            });
-          }
-        });
-    },
-    [navigation],
-  );
+  const signIn = useCallback((email: string, password: string) => {
+    axios
+      .post<AuthResponse>(`${BASE_URL}/auth/login`, {
+        email,
+        password,
+      })
+      .then((response) => {
+        if (response && response.status === 200) {
+          const userInfo = response.data;
+          setUserInfo(userInfo);
+          AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
+        }
+      })
+      .catch((error) => {
+        if (error.response && error.response.code === 'ERR.1.0002') {
+          Toast.show({
+            type: 'error',
+            text1: 'E-mail ou senha inválidos',
+          });
+        } else if (error.response && error.response.code === 'ERR.1.0001') {
+          navigation.navigate('ConfirmEmail', { email });
+        } else {
+          Toast.show({
+            type: 'error',
+            text1: 'Algo deu errado, tente novamente mais tarde',
+          });
+        }
+      });
+  }, []);
 
   const contextValue = useMemo(() => {
     return {
