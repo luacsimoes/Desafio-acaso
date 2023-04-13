@@ -14,11 +14,26 @@ export const Content = styled.View`
 export const Footer = styled.View`
   display: flex;
   align-items: center;
+  margin-top: 24px;
 `;
 
 export const Container = styled.View`
   flex: 1;
   background-color: #030446;
+`;
+
+export const InputEmail = styled.TextInput<{ theme: ThemeType }>`
+  align-items: center;
+  justify-content: center;
+  background-color: #1e1f2f;
+  height: 50px;
+  width: 339px;
+  padding: 16px;
+  top: 8px;
+  border-radius: 6px;
+  margin-bottom: ${({ theme }) => theme.margin.large}px;
+  color: white;
+  font-size: 12px;
 `;
 
 export const Label = styled.Text<{ theme: ThemeType }>`
@@ -42,7 +57,7 @@ export const LoginText = styled.Text`
   font-weight: 700;
 `;
 
-export const Enter = styled.Text`
+export const Enter = styled.Text<{ theme: ThemeType }>`
   color: black;
   font-family: 'Raleway-Regular';
   font-size: 12px;
@@ -59,7 +74,7 @@ export const RememberCreateAccount = styled.Text<{ theme: ThemeType }>`
   margin-bottom: 10px;
 `;
 
-export const CreateAccount = styled.Text`
+export const CreateAccount = styled.Text<{ theme: ThemeType }>`
   color: white;
   font-family: 'Raleway-Regular';
   font-size: 12px;

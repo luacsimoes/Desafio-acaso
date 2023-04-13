@@ -64,20 +64,18 @@ const Login = () => {
           blurOnSubmit
         />
       </Content>
+      <Button
+        onPress={() => {
+          signIn(email, password);
+        }}
+        width={339}
+        height={50}
+        isWhite
+      >
+        <Enter>Entrar</Enter>
+      </Button>
+      <RememberCreateAccount>Não possui conta em aca.so?</RememberCreateAccount>
       <Footer>
-        <Button
-          onPress={() => {
-            signIn(email, password);
-          }}
-          width={339}
-          height={50}
-          isWhite
-        >
-          <Enter>Entrar</Enter>
-        </Button>
-        <RememberCreateAccount>
-          Não possui conta em aca.so?
-        </RememberCreateAccount>
         <Button
           onPress={() => {
             navigation.navigate('Signup');
