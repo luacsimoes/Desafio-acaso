@@ -35,8 +35,8 @@ const Login = () => {
         <AcasoLogo source={require('./images/logo.png')} />
         <LoginText>Login</LoginText>
       </Header>
+      <Label>Email</Label>
       <Content>
-        <Label>Email</Label>
         <InputEmail
           placeholder="seu@email.com"
           placeholderTextColor="gray"
@@ -44,7 +44,9 @@ const Login = () => {
           onChangeText={setEmail}
           onSubmitEditing={handleEmailSubmitEditing}
         />
-        <Label>Senha</Label>
+      </Content>
+      <Label>Senha</Label>
+      <Content>
         <Input
           ref={passwordRef}
           value={password}
