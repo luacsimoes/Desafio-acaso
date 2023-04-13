@@ -6,12 +6,13 @@ import Button from '@/components/Button';
 import { BASE_URL } from '@/config';
 import axios from 'axios';
 import Toast from 'react-native-toast-message';
+import Input from '@/components/Input';
 import { AuthResponse } from '@/context/Auth';
 import {
   Header,
   Container,
   Content,
-  InputEmail,
+  InputWrapper,
   InputPassword,
   Label,
   AcasoLogo,
@@ -19,8 +20,9 @@ import {
   SignupText,
   ErrorText,
   LabelPassword,
-  ContentButton,
+  Footer,
   BackLoginText,
+  ButtonWrapper,
 } from './styles';
 
 const Signup = () => {
@@ -51,11 +53,20 @@ const Signup = () => {
           last_name,
         });
         navigation.navigate('ConfirmEmail', { email });
-      } catch (error) {
-        Toast.show({
-          type: 'error',
-          text1: 'Erro ao cadastrar',
-        });
+      } catch (error: any) {
+        if (error.response && error.response.code === 'ERR.1.0003') {
+          Toast.show({
+            type: 'error',
+            text1: 'Senha inválida',
+          });
+        } else if (error.response && error.response.code === 'ERR.1.0009') {
+          Toast.show({
+            type: 'error',
+            text1: 'Email já registrado',
+          });
+        } else if (error.response && error.response.code === 'ERR.1.0010') {
+          navigation.navigate('ConfirmEmail', { email });
+        }
       }
     },
     [navigation],
@@ -72,9 +83,9 @@ const Signup = () => {
           <AcasoLogo source={require('./images/logo.png')} />
           <Cadastro>Cadastro</Cadastro>
         </Header>
-        <Label>E-mail*</Label>
         <Content>
-          <InputEmail
+          <Label>E-mail*</Label>
+          <Input
             placeholder="seu@email.com"
             placeholderTextColor="gray"
             value={email}
@@ -82,10 +93,8 @@ const Signup = () => {
             onSubmitEditing={() => firstNameRef.current?.focus()}
             returnKeyType="next"
           />
-        </Content>
-        <Label>Primeiro nome*</Label>
-        <Content>
-          <InputEmail
+          <Label>Primeiro nome*</Label>
+          <Input
             ref={firstNameRef}
             placeholder="Primeiro nome"
             placeholderTextColor="gray"
@@ -94,10 +103,8 @@ const Signup = () => {
             onSubmitEditing={() => lastNameRef.current?.focus()}
             returnKeyType="next"
           />
-        </Content>
-        <Label>Último nome*</Label>
-        <Content>
-          <InputEmail
+          <Label>Último nome*</Label>
+          <Input
             ref={lastNameRef}
             placeholder="Último nome"
             placeholderTextColor="gray"
@@ -106,38 +113,38 @@ const Signup = () => {
             onSubmitEditing={() => passwordRef.current?.focus()}
             returnKeyType="next"
           />
-        </Content>
-        <Label>Senha*</Label>
-        <Content>
-          <InputPassword
-            ref={passwordRef}
-            passwordMatch={passwordMatch}
-            placeholderTextColor="gray"
-            placeholder="Senha"
-            value={password}
-            onChangeText={setPassword}
-            onSubmitEditing={() => confirmPasswordRef.current?.focus()}
-            returnKeyType="next"
-            secureTextEntry
-          />
+          <Label>Senha*</Label>
+          <InputWrapper>
+            <InputPassword
+              ref={passwordRef}
+              passwordMatch={passwordMatch}
+              placeholderTextColor="gray"
+              placeholder="Senha"
+              value={password}
+              onChangeText={setPassword}
+              onSubmitEditing={() => confirmPasswordRef.current?.focus()}
+              returnKeyType="next"
+              secureTextEntry
+            />
+          </InputWrapper>
+          {!passwordMatch && <ErrorText>Senhas não coincidem</ErrorText>}
+          <LabelPassword passwordMatch={passwordMatch}>
+            Confirme sua senha*
+          </LabelPassword>
+          <InputWrapper>
+            <InputPassword
+              ref={confirmPasswordRef}
+              passwordMatch={passwordMatch}
+              placeholderTextColor="gray"
+              placeholder="Senha"
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
+              secureTextEntry
+            />
+          </InputWrapper>
         </Content>
         {!passwordMatch && <ErrorText>Senhas não coincidem</ErrorText>}
-        <LabelPassword passwordMatch={passwordMatch}>
-          Confirme sua senha*
-        </LabelPassword>
-        <Content>
-          <InputPassword
-            ref={confirmPasswordRef}
-            passwordMatch={passwordMatch}
-            placeholderTextColor="gray"
-            placeholder="Senha"
-            value={confirmPassword}
-            onChangeText={setConfirmPassword}
-            secureTextEntry
-          />
-        </Content>
-        {!passwordMatch && <ErrorText>Senhas não coincidem</ErrorText>}
-        <Content>
+        <Footer>
           <Button
             onPress={() => registerUser(email, password, firstName, lastName)}
             width={339}
@@ -146,20 +153,19 @@ const Signup = () => {
           >
             <SignupText>Criar conta em aca.so</SignupText>
           </Button>
-        </Content>
-
-        <ContentButton>
-          <Button
-            onPress={() => {
-              navigation.navigate('Login');
-            }}
-            width={339}
-            height={50}
-            isWhite={false}
-          >
-            <BackLoginText>Voltar ao login</BackLoginText>
-          </Button>
-        </ContentButton>
+          <ButtonWrapper>
+            <Button
+              onPress={() => {
+                navigation.navigate('Login');
+              }}
+              width={339}
+              height={50}
+              isWhite={false}
+            >
+              <BackLoginText>Voltar ao login</BackLoginText>
+            </Button>
+          </ButtonWrapper>
+        </Footer>
       </ScrollView>
     </Container>
   );
