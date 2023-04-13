@@ -4,7 +4,7 @@ import { ScrollView, TextInput } from 'react-native';
 import { propsStack } from '@/routes/Stack/Models';
 import Button from '@/components/Button';
 import { BASE_URL } from '@/config';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import Toast from 'react-native-toast-message';
 import Input from '@/components/Input';
 import { AuthResponse } from '@/context/Auth';
@@ -69,7 +69,7 @@ const Signup = () => {
         }
       }
     },
-    [navigation, email],
+    [navigation],
   );
 
   useLayoutEffect(() => {

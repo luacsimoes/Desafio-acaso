@@ -69,7 +69,7 @@ const Signup = () => {
         }
       }
     },
-    [navigation, email],
+    [navigation],
   );
 
   useLayoutEffect(() => {

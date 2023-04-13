@@ -4,7 +4,7 @@ import { ScrollView, TextInput } from 'react-native';
 import { propsStack } from '@/routes/Stack/Models';
 import Button from '@/components/Button';
 import { BASE_URL } from '@/config';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import Toast from 'react-native-toast-message';
 import Input from '@/components/Input';
 import { AuthResponse } from '@/context/Auth';
@@ -53,7 +53,7 @@ const Signup = () => {
           last_name,
         });
         navigation.navigate('ConfirmEmail', { email });
-      } catch (error: any) {
+      } catch (error: AxiosError) {
         if (error.response && error.response.code === 'ERR.1.0003') {
           Toast.show({
             type: 'error',
@@ -69,7 +69,7 @@ const Signup = () => {
         }
       }
     },
-    [navigation, email],
+    [navigation],
   );
 
   useLayoutEffect(() => {

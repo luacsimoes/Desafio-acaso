@@ -53,7 +53,7 @@ const Signup = () => {
           last_name,
         });
         navigation.navigate('ConfirmEmail', { email });
-      } catch (error: any) {
+      } catch (error: AxiosError) {
         if (error.response && error.response.code === 'ERR.1.0003') {
           Toast.show({
             type: 'error',
@@ -69,7 +69,7 @@ const Signup = () => {
         }
       }
     },
-    [navigation, email],
+    [navigation],
   );
 
   useLayoutEffect(() => {
