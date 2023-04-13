@@ -11,7 +11,6 @@ export const InputEmail = styled.TextInput`
   border-radius: 6px;
   color: white;
   font-size: 12px;
-  margin-bottom: 24px;
 `;
 
 export const RightIcon = styled.TouchableOpacity`

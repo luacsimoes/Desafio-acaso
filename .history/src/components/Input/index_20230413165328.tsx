@@ -1,13 +1,27 @@
 import React, { useState, forwardRef } from 'react';
 import { Image, TextInput } from 'react-native';
-import { RightIcon, InputWrapper, InputEmail } from './styles';
+import styled from 'styled-components/native';
 import { InputProps } from './types';
+import { RightIcon, InputWrapper, InputEmail } from './styles';
 
-const Input: React.ForwardRefRenderFunction<TextInput, InputProps> = (
+
+interface InputSenhaProps {
+  passwordsMatch?: boolean;
+}
+
+interface Props extends InputProps {
+  isPassword?: boolean;
+  rightIcon?: boolean;
+}
+
+const Input: React.ForwardRefRenderFunction<TextInput, Props> = (
   { isPassword, rightIcon, ...props },
   ref,
 ) => {
   const [hidePassword, setHidePassword] = useState(true);
+  const [passwordsMatch, setPasswordsMatch] = useState(true);
+
+  const borderColor = isPassword && !passwordsMatch ? '#E93F78' : '#1E1F2F';
 
   return (
     <InputWrapper>
@@ -16,9 +30,11 @@ const Input: React.ForwardRefRenderFunction<TextInput, InputProps> = (
         placeholderTextColor="gray"
         secureTextEntry={isPassword && hidePassword}
         ref={ref}
+        passwordsMatch={passwordsMatch}
+        borderColor={borderColor}
       />
       {isPassword && rightIcon && (
-        <RightIcon
+        <rightIcon
           onPress={() => {
             setHidePassword(!hidePassword);
           }}

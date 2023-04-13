@@ -4,7 +4,7 @@ import { RightIcon, InputWrapper, InputEmail } from './styles';
 import { InputProps } from './types';
 
 const Input: React.ForwardRefRenderFunction<TextInput, InputProps> = (
-  { isPassword, rightIcon, ...props },
+  { isPassword, passwordMatchs, rightIcon, ...props },
   ref,
 ) => {
   const [hidePassword, setHidePassword] = useState(true);

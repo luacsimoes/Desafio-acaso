@@ -4,7 +4,7 @@ interface ExtraInputProps {
   isPassword?: boolean;
   fontSize?: number;
   rightIcon?: boolean;
-  passwordMatchs?: boolean;
+  passwordMatch?: boolean;
 }
 
 export type InputProps = TextInputProps & ExtraInputProps;

@@ -24,6 +24,4 @@ export const RightIcon = styled.TouchableOpacity`
 
 export const InputWrapper = styled.View`
   width: 100%;
-  align-items: center;
-  justify-content: center;
 `;

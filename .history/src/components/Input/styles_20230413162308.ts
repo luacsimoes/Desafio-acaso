@@ -1,6 +1,10 @@
 import styled from 'styled-components/native';
 
-export const InputEmail = styled.TextInput`
+interface InputSenhaProps {
+  passwordMatch: boolean;
+}
+
+export const InputEmail = styled.TextInput<InputSenhaProps>`
   align-items: center;
   justify-content: center;
   background-color: #1e1f2f;
@@ -10,8 +14,8 @@ export const InputEmail = styled.TextInput`
   top: 8px;
   border-radius: 6px;
   color: white;
+  margin-bottom: ${(props) => (props.passwordMatch ? '24px' : '8px')};
   font-size: 12px;
-  margin-bottom: 24px;
 `;
 
 export const RightIcon = styled.TouchableOpacity`

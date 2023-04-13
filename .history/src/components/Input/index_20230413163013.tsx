@@ -16,6 +16,7 @@ const Input: React.ForwardRefRenderFunction<TextInput, InputProps> = (
         placeholderTextColor="gray"
         secureTextEntry={isPassword && hidePassword}
         ref={ref}
+        passwordMatch={passwordMatch}
       />
       {isPassword && rightIcon && (
         <RightIcon
