@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { AuthContext } from '@/context/Auth';
+import { AuthContext } from '@/context';
 import AuthStack from './Stack/AuthStack';
 import AppStack from './Stack/AppStack';
 

@@ -4,7 +4,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
 import ThemeProvider from './Theme/ThemeProvider';
-import { AuthProvider } from './context/Auth';
+import { AuthProvider } from './context';
 import Route from './routes';
 import { toastConfig } from './Toast/toastConfig';
 import { BASE_URL } from './config';
