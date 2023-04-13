@@ -36,7 +36,7 @@ interface ButtonTextProps {
 const ButtonText = styled.Text<ButtonTextProps>`
   color: ${({ isWhite, theme }) =>
     isWhite ? theme.colors.primary : theme.colors.secondary};
-  font-size: 14px;
+  font-size: ${({ theme }) => theme.fontSizes.medium}px;
   font-weight: bold;
 `;
 
