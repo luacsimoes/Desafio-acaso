@@ -11,14 +11,10 @@ export const Header = styled.View`
 
 export const Content = styled.View`
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
 `;
-
-export const ContentButton = styled.View`
+export const ButtonWrapper = styled.View`
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   margin-top: 24px;
@@ -29,16 +25,6 @@ export const Container = styled.View`
   background-color: #030446;
 `;
 
-export const InputEmail = styled.TextInput`
-  background-color: #1e1f2f;
-  height: 50px;
-  width: 339px;
-  padding: 16px;
-  border-radius: 6px;
-  margin-top: 8px;
-  color: white;
-`;
-
 export const Label = styled.Text`
   color: white;
   font-family: 'Raleway-Regular';
@@ -46,7 +32,6 @@ export const Label = styled.Text`
   font-weight: 500;
   margin-bottom: 8px;
   margin-left: 61px;
-  margin-top: 24px;
 `;
 
 export const LabelPassword = styled.Text<{ passwordMatch: boolean }>`
@@ -57,6 +42,17 @@ export const LabelPassword = styled.Text<{ passwordMatch: boolean }>`
   margin-bottom: 8px;
   margin-left: 61px;
   margin-top: ${(props) => (props.passwordMatch ? '0px' : '0px')};
+`;
+
+export const InputWrapper = styled.View`
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const Footer = styled.View`
+  display: flex;
+  align-items: center;
 `;
 
 export const AcasoLogo = styled.Image`
@@ -97,6 +93,8 @@ export const ErrorText = styled.Text`
 
 export const InputPassword = styled.TextInput<InputSenhaProps>`
   background-color: #1e1f2f;
+  align-items: center;
+  justify-content: center;
   height: 50px;
   width: 339px;
   padding: 16px;
