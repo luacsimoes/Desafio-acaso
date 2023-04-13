@@ -85,7 +85,7 @@ export const AuthProvider: React.FC<{ children?: ReactNode }> = ({
           }
         });
     },
-    [navigation, userInfo],
+    [navigation],
   );
 
   const contextValue = useMemo(() => {

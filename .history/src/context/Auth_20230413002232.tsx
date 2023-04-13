@@ -65,7 +65,8 @@ export const AuthProvider: React.FC<{ children?: ReactNode }> = ({
         })
         .then((response) => {
           if (response && response.status === 200) {
-            setUserInfo(response.data);
+            const userInfo = response.data;
+            setUserInfo(userInfo);
             AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
           }
         })
@@ -85,7 +86,7 @@ export const AuthProvider: React.FC<{ children?: ReactNode }> = ({
           }
         });
     },
-    [navigation, userInfo],
+    [navigation],
   );
 
   const contextValue = useMemo(() => {
