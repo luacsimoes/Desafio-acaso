@@ -46,15 +46,20 @@ const ConfirmEmail = () => {
       setCountdown(120);
       setTimer(setTimeout(() => setIsButtonDisabled(false), 120000));
     } catch (error: any) {
-      if (error.response.data.code === 'ERR.1.0008') {
+      if (error.response.data.code === 'ERR.1.0004') {
+        Toast.show({
+          type: 'error',
+          text1: 'Código de confirmação inválido',
+        });
+      } else if (error.response.data.code === 'ERR.1.0005') {
+        Toast.show({
+          type: 'error',
+          text1: 'Código de confirmação expirado',
+        });
+      } else if (error.response.data.code === 'ERR.1.0008') {
         Toast.show({
           type: 'error',
           text1: 'Email não registrado',
-        });
-      } else {
-        Toast.show({
-          type: 'error',
-          text1: 'Tente novamente mais tarde',
         });
       }
     }
@@ -72,8 +77,7 @@ const ConfirmEmail = () => {
             navigation.navigate('Login');
           }
         })
-        .catch((error: any) => {
-          console.log(error);
+        .catch((error) => {
           if (error.response.data.code === 'ERR.1.0004') {
             Toast.show({
               type: 'error',

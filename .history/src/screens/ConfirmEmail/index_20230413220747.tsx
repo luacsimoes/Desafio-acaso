@@ -45,17 +45,19 @@ const ConfirmEmail = () => {
       setIsButtonDisabled(true);
       setCountdown(120);
       setTimer(setTimeout(() => setIsButtonDisabled(false), 120000));
-    } catch (error: any) {
-      if (error.response.data.code === 'ERR.1.0008') {
+    } catch (error) {
+      if (error.response.data.code === 'ERR.1.0003') {
         Toast.show({
           type: 'error',
-          text1: 'Email não registrado',
+          text1: 'Senha inválida',
         });
-      } else {
+      } else if (error.response.data.code === 'ERR.1.0009') {
         Toast.show({
           type: 'error',
-          text1: 'Tente novamente mais tarde',
+          text1: 'Email já registrado',
         });
+      } else if (error.response.data.code === 'ERR.1.0010') {
+        navigation.navigate('ConfirmEmail', { email });
       }
     }
   }, []);
@@ -72,22 +74,16 @@ const ConfirmEmail = () => {
             navigation.navigate('Login');
           }
         })
-        .catch((error: any) => {
-          console.log(error);
-          if (error.response.data.code === 'ERR.1.0004') {
+        .catch((error) => {
+          if (error.response && error.response.status === 400) {
             Toast.show({
               type: 'error',
-              text1: 'Código de confirmação inválido',
+              text1: 'Código inválido',
             });
-          } else if (error.response.data.code === 'ERR.1.0005') {
+          } else {
             Toast.show({
               type: 'error',
-              text1: 'Código de confirmação expirado',
-            });
-          } else if (error.response.data.code === 'ERR.1.0008') {
-            Toast.show({
-              type: 'error',
-              text1: 'Email não registrado',
+              text1: 'Algo deu errado, tente novamente mais tarde',
             });
           }
         });
