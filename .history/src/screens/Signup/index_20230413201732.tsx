@@ -55,7 +55,7 @@ const Signup = () => {
         navigation.navigate('ConfirmEmail', { email });
       } catch (error: any) {
         console.log(error.response.data.code);
-        if (error.response.data.code === 'ERR.1.0003') {
+        if (error.response && error.response.data.code === 'ERR.1.0003') {
           Toast.show({
             type: 'error',
             text1: 'Senha inválida',
@@ -67,11 +67,6 @@ const Signup = () => {
           });
         } else if (error.response.data.code === 'ERR.1.0010') {
           navigation.navigate('ConfirmEmail', { email });
-        } else {
-          Toast.show({
-            type: 'error',
-            text1: 'Algo deu errado, tente novamente mais tarde',
-          });
         }
       }
     },

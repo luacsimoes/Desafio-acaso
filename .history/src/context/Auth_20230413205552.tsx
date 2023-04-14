@@ -70,7 +70,6 @@ export const AuthProvider: React.FC<{ children?: ReactNode }> = ({
           }
         })
         .catch((error) => {
-          console.log(error.response.data.code);
           if (error.response.data.code === 'ERR.1.0002') {
             Toast.show({
               type: 'error',

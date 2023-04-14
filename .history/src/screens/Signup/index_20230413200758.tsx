@@ -54,24 +54,19 @@ const Signup = () => {
         });
         navigation.navigate('ConfirmEmail', { email });
       } catch (error: any) {
-        console.log(error.response.data.code);
-        if (error.response.data.code === 'ERR.1.0003') {
+        console.log(error.response.code);
+        if (error.response && error.response.code === 'ERR.1.0003') {
           Toast.show({
             type: 'error',
             text1: 'Senha inválida',
           });
-        } else if (error.response.data.code === 'ERR.1.0009') {
+        } else if (error.response && error.response.code === 'ERR.1.0009') {
           Toast.show({
             type: 'error',
             text1: 'Email já registrado',
           });
-        } else if (error.response.data.code === 'ERR.1.0010') {
+        } else if (error.response && error.response.code === 'ERR.1.0010') {
           navigation.navigate('ConfirmEmail', { email });
-        } else {
-          Toast.show({
-            type: 'error',
-            text1: 'Algo deu errado, tente novamente mais tarde',
-          });
         }
       }
     },

@@ -70,13 +70,12 @@ export const AuthProvider: React.FC<{ children?: ReactNode }> = ({
           }
         })
         .catch((error) => {
-          console.log(error.response.data.code);
-          if (error.response.data.code === 'ERR.1.0002') {
+          if (error.response.code === 'ERR.1.0002') {
             Toast.show({
               type: 'error',
               text1: 'E-mail ou senha inválidos',
             });
-          } else if (error.response.data.code === 'ERR.1.0001') {
+          } else if (error.response.code === 'ERR.1.0001') {
             navigation.navigate('ConfirmEmail', { email });
           } else {
             Toast.show({

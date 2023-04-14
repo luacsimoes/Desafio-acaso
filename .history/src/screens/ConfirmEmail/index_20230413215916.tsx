@@ -54,10 +54,10 @@ const ConfirmEmail = () => {
   }, []);
 
   const confirmSignUp = useCallback(
-    (emailParam: string, confirmation_code: string) => {
+    (email: string, confirmation_code: string) => {
       axios
         .post<AuthResponse>(`${BASE_URL}/auth/confirm-sign-up`, {
-          email: emailParam,
+          email,
           confirmation_code,
         })
         .then((response) => {

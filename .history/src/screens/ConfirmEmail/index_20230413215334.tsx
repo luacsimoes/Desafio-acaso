@@ -34,12 +34,12 @@ const ConfirmEmail = () => {
   const [countdown, setCountdown] = useState(120);
   const navigation = useNavigation<propsStack>();
 
-  const resendCode = useCallback(async (emailParam: string) => {
+  const resendCode = useCallback(async () => {
     try {
       await axios.post<AuthResponse>(
         `${BASE_URL}/auth/resend-confirmation-code`,
         {
-          email: emailParam,
+          email,
         },
       );
       setIsButtonDisabled(true);
@@ -51,13 +51,13 @@ const ConfirmEmail = () => {
         text1: 'Código inválido',
       });
     }
-  }, []);
+  }, [email]);
 
   const confirmSignUp = useCallback(
-    (emailParam: string, confirmation_code: string) => {
+    (email: string, confirmation_code: string) => {
       axios
         .post<AuthResponse>(`${BASE_URL}/auth/confirm-sign-up`, {
-          email: emailParam,
+          email,
           confirmation_code,
         })
         .then((response) => {
