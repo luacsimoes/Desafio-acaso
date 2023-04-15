@@ -25,13 +25,10 @@ export const App = () => {
               `${BASE_URL}/auth/refresh-token`,
               {},
             );
-            AsyncStorage.setItem('token', response.data.token.access_token);
-            AsyncStorage.setItem(
-              'refreshToken',
-              response.data.token.refresh_token,
-            );
-            axios.defaults.headers.common.Authorization = `Bearer ${response.data.token.access_token}`;
-            originalRequest.headers.Authorization = `Bearer ${response.data.token.access_token}`;
+            AsyncStorage.setItem('token', response.data.token);
+            AsyncStorage.setItem('refreshToken', response.data.refreshToken);
+            axios.defaults.headers.common.Authorization = `Bearer ${response.data.access_token}`;
+            originalRequest.headers.Authorization = `Bearer ${response.data.access_token}`;
             return axios(originalRequest);
           }
         }
