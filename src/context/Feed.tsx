@@ -33,13 +33,9 @@ const FeedProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
   const fetchProfilePicture = useCallback(async () => {
     try {
       const response = await axios.get(
-        `https://api.staging.aca.so/user/profile/${userInfo?.user?.id}`,
+        `https://api.staging.aca.so/user/public/${userInfo?.user?.id}`,
       );
       setProfilePicture(response.data.profile_picture);
-      AsyncStorage.setItem(
-        'userPicture',
-        JSON.stringify(response.data.profile_picture),
-      );
     } catch (error: any) {
       if (error.response?.status === 404) {
         setProfilePicture('');

@@ -7,26 +7,26 @@ export const Container = styled.View`
 `;
 
 export const Header = styled.View`
-  justify-content: center;
   background-color: #1e1f2f;
   width: 100%;
+  justify-content: space-between;
+  flex-direction: row;
 `;
 
 export const ProfilePicture = styled.Image`
-  width: 144px;
-  height: 144px;
+  width: 24px;
+  height: 24px;
   border-radius: 77px;
   position: absolute;
-  border: 8.5px;
+  border: 2px;
   border-color: white;
-  top: 50%;
-  left: 50%;
+  position: absolute;
+  top: 29px;
   z-index: 1;
 `;
 
 export const AcasoLogo = styled.Image`
   margin-top: 35px;
-  margin-left: 24px;
   z-index: 0;
   margin-bottom: 16px;
 `;
