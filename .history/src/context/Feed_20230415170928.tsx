@@ -34,7 +34,7 @@ const FeedProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
     try {
       const response = await axios.get(`${BASE_URL}/user/profile`, {
         headers: {
-          Authorization: `Bearer ${userInfo?.token.id_token}`,
+          Authorization: `Bearer ${userInfo?.token.access_token}`,
         },
       });
       setProfilePicture(response.data.profile_picture);

@@ -17,7 +17,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type FeedContextValue = {
   profilePicture: string;
-  fetchProfilePicture: () => void;
 };
 
 export const FeedContext = createContext<FeedContextValue>({
@@ -47,16 +46,11 @@ const FeedProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
     }
   }, [userInfo]);
 
-  useEffect(() => {
-    fetchProfilePicture();
-  }, [fetchProfilePicture]);
-
   const contextValue = useMemo(() => {
     return {
       profilePicture,
-      fetchProfilePicture,
     };
-  }, [profilePicture, fetchProfilePicture]);
+  }, [profilePicture]);
 
   return (
     <FeedContext.Provider value={contextValue}>{children}</FeedContext.Provider>

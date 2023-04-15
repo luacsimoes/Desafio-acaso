@@ -34,22 +34,14 @@ export const App = () => {
           );
           await AsyncStorage.setItem('access_token', res.data.access_token);
           await AsyncStorage.setItem('id_token', res.data.id_token);
-          originalReq.headers.Authorization = `Bearer ${res.data.access_token}`;
+          originalReq.headers.Authorization = `Bearer ${res.data.token.access_token}`;
           setUserInfo((userInfo) => {
             if (userInfo) {
               const { access_token, id_token } = userInfo.token;
-              return {
-                token: {
-                  access_token,
-                  id_token,
-                  refresh_token: userInfo.token.refresh_token,
-                },
-                user: userInfo.user,
-              };
+              return { access_token, id_token };
             }
             return undefined;
           });
-
           return axios(originalReq);
         }
         throw err;

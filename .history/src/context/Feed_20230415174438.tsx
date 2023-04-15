@@ -47,16 +47,11 @@ const FeedProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
     }
   }, [userInfo]);
 
-  useEffect(() => {
-    fetchProfilePicture();
-  }, [fetchProfilePicture]);
-
   const contextValue = useMemo(() => {
     return {
       profilePicture,
-      fetchProfilePicture,
     };
-  }, [profilePicture, fetchProfilePicture]);
+  }, [profilePicture]);
 
   return (
     <FeedContext.Provider value={contextValue}>{children}</FeedContext.Provider>
