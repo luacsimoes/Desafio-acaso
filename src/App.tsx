@@ -1,45 +1,55 @@
-import React, { useEffect } from 'react';
+import React, { useContext } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
 import ThemeProvider from './Theme/ThemeProvider';
-import { AuthProvider } from './context/Auth';
+import { AuthProvider, AuthContext } from './context/Auth';
 import Route from './routes';
 import FeedProvider from './context/Feed';
 import { toastConfig } from './Toast/toastConfig';
 import { BASE_URL } from './config';
 
 export const App = () => {
-  useEffect(() => {
-    const interceptor = axios.interceptors.response.use(
-      (response) => response,
-      async (error) => {
-        if (error.response && error.response.status === 401) {
-          const originalRequest = error.config;
-          const refreshToken = await AsyncStorage.getItem('refreshToken');
+  const { userInfo } = useContext(AuthContext);
 
-          if (refreshToken) {
-            axios.defaults.headers.common.Authorization = `Bearer ${refreshToken}`;
-            const response = await axios.post(
-              `${BASE_URL}/auth/refresh-token`,
-              {},
-            );
-            AsyncStorage.setItem('token', response.data.token.access_token);
-            AsyncStorage.setItem(
-              'refreshToken',
-              response.data.token.refresh_token,
-            );
-            axios.defaults.headers.common.Authorization = `Bearer ${response.data.token.access_token}`;
-            originalRequest.headers.Authorization = `Bearer ${response.data.token.access_token}`;
-            return axios(originalRequest);
+  const defineInterceptor = () => {
+    axios.interceptors.response.use(
+      (response) => {
+        return response;
+      },
+      (err) => {
+        return new Promise((resolve, reject) => {
+          const originalReq = err.config;
+          if (err.response.status === 401 && err.config && !err.config.retry) {
+            originalReq.retry = true;
+            AsyncStorage.getItem('TOKEN').then((token) => {
+              const res = axios
+                .post(
+                  `${BASE_URL}/auth/refresh-token`,
+                  { oldToken: token },
+                  {
+                    headers: {
+                      Authorization: `Bearer ${userInfo?.token.access_token}`,
+                    },
+                  },
+                )
+                .then((res) => {
+                  AsyncStorage.setItem('access_token', res.data.access_token);
+                  AsyncStorage.setItem('id_token', res.data.id_token);
+                  originalReq.headers.Authorization = `Bearer ${res.data.token.access_token}`;
+                  return axios(originalReq);
+                });
+              resolve(res);
+            });
+          } else {
+            reject(err);
           }
-        }
-        return Promise.reject(error);
+        });
       },
     );
-    return () => axios.interceptors.response.eject(interceptor);
-  }, []);
+  };
+  defineInterceptor();
 
   return (
     <ThemeProvider>
