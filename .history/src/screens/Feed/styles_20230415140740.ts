@@ -22,12 +22,11 @@ export const ProfilePicture = styled.Image`
   position: absolute;
   top: 29px;
   z-index: 1;
-  right: 24px;
+  right: 0;
 `;
 
 export const AcasoLogo = styled.Image`
   margin-top: 35px;
-  margin-left: 24px;
   z-index: 0;
   margin-bottom: 16px;
 `;

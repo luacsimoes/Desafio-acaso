@@ -32,12 +32,12 @@ const FeedProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
 
   const fetchProfilePicture = useCallback(async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/user/profile-picture`, {
+      const response = await axios.get(`${BASE_URL}/user/profile`, {
         headers: {
-          Authorization: `Bearer ${userInfo?.token.access_token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
-      setProfilePicture(response.data);
+      setProfilePicture(response.data.profile_picture);
     } catch (error: any) {
       if (error.response?.status === 404) {
         setProfilePicture('');

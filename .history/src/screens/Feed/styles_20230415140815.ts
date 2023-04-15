@@ -27,7 +27,7 @@ export const ProfilePicture = styled.Image`
 
 export const AcasoLogo = styled.Image`
   margin-top: 35px;
-  margin-left: 24px;
+  margin-left: 24px
   z-index: 0;
   margin-bottom: 16px;
 `;

@@ -9,7 +9,6 @@ export const Container = styled.View`
 export const Header = styled.View`
   background-color: #1e1f2f;
   width: 100%;
-  flex-direction: row;
   justify-content: space-between;
 `;
 
@@ -17,17 +16,17 @@ export const ProfilePicture = styled.Image`
   width: 24px;
   height: 24px;
   border-radius: 77px;
+  position: absolute;
   border: 2px;
   border-color: white;
   position: absolute;
   top: 29px;
   z-index: 1;
-  right: 24px;
+  flex-direction: row-reverse;
 `;
 
 export const AcasoLogo = styled.Image`
   margin-top: 35px;
-  margin-left: 24px;
   z-index: 0;
   margin-bottom: 16px;
 `;

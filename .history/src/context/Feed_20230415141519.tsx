@@ -32,12 +32,10 @@ const FeedProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
 
   const fetchProfilePicture = useCallback(async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/user/profile-picture`, {
-        headers: {
-          Authorization: `Bearer ${userInfo?.token.access_token}`,
-        },
-      });
-      setProfilePicture(response.data);
+      const response = await axios.get(
+        `https://api.staging.aca.so/user/profile`,
+      );
+      setProfilePicture(response.data.profile_picture);
     } catch (error: any) {
       if (error.response?.status === 404) {
         setProfilePicture('');
