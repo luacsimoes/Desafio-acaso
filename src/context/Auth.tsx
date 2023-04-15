@@ -39,6 +39,7 @@ interface AuthContextData {
   userInfo?: AuthResponse;
   userId?: string;
   signOut: () => Promise<void>;
+  setUserInfo: React.Dispatch<React.SetStateAction<AuthResponse | undefined>>;
 }
 
 export const AuthContext = createContext<AuthContextData>(
@@ -49,8 +50,8 @@ export const AuthProvider: React.FC<{ children?: ReactNode }> = ({
   children,
 }) => {
   const [userInfo, setUserInfo] = useState<AuthResponse>();
+  const [userToken, setUserToken] = useState<AuthResponse>();
   const navigation = useNavigation<propsStack>();
-
   const signOut = useCallback((): Promise<void> => {
     setUserInfo(undefined);
     return AsyncStorage.removeItem('userInfo');
@@ -66,6 +67,7 @@ export const AuthProvider: React.FC<{ children?: ReactNode }> = ({
         .then((response) => {
           if (response && response.status === 200) {
             setUserInfo(response.data);
+            setUserToken(response.data.token);
             AsyncStorage.setItem('userInfo', JSON.stringify(response.data));
           }
         })
@@ -94,8 +96,9 @@ export const AuthProvider: React.FC<{ children?: ReactNode }> = ({
       signIn,
       userInfo,
       signOut,
+      setUserInfo,
     };
-  }, [signIn, userInfo, signOut]);
+  }, [signIn, userInfo, signOut, setUserInfo]);
 
   return (
     <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
