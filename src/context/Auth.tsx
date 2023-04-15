@@ -50,7 +50,6 @@ export const AuthProvider: React.FC<{ children?: ReactNode }> = ({
   children,
 }) => {
   const [userInfo, setUserInfo] = useState<AuthResponse>();
-  const [userToken, setUserToken] = useState<AuthResponse>();
   const navigation = useNavigation<propsStack>();
   const signOut = useCallback((): Promise<void> => {
     setUserInfo(undefined);
@@ -67,7 +66,6 @@ export const AuthProvider: React.FC<{ children?: ReactNode }> = ({
         .then((response) => {
           if (response && response.status === 200) {
             setUserInfo(response.data);
-            setUserToken(response.data.token);
             AsyncStorage.setItem('userInfo', JSON.stringify(response.data));
           }
         })
