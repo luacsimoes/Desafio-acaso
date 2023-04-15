@@ -16,7 +16,11 @@ import {
   StrongText,
 } from './styles';
 
-const ProfileScreen = () => {
+type ProfileScreenProps = {
+  userPicture: string;
+};
+
+const ProfileScreen = ({ userPicture }: ProfileScreenProps) => {
   const { signOut, userInfo } = useContext(AuthContext);
   const [profilePicture, setProfilePicture] = useState<string>('');
 
@@ -24,7 +28,7 @@ const ProfileScreen = () => {
     async function fetchProfilePicture() {
       try {
         const response = await axios.get(
-          `https://api.staging.aca.so/user/profile/${userInfo?.user?.id}`,
+          `https://api.staging.aca.so/user/public/${userInfo?.user?.id}`,
         );
         setProfilePicture(response.data.profile_picture);
       } catch (error: any) {
@@ -43,7 +47,7 @@ const ProfileScreen = () => {
       <Header>
         <Image source={require('./images/adorno.png')} />
         {profilePicture !== '' ? (
-          <ProfilePicture source={{ uri: profilePicture }} />
+          <ProfilePicture source={{ uri: userPicture }} />
         ) : (
           <ProfilePicture source={require('./images/defaultimage.jpg')} />
         )}

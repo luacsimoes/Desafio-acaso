@@ -16,6 +16,10 @@ import {
   StrongText,
 } from './styles';
 
+type ProfileScreenProps = {
+  userPicture: string;
+};
+
 const ProfileScreen = () => {
   const { signOut, userInfo } = useContext(AuthContext);
   const [profilePicture, setProfilePicture] = useState<string>('');
