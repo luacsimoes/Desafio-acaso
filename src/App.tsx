@@ -30,7 +30,7 @@ export const App = () => {
                   { oldToken: token },
                   {
                     headers: {
-                      Authorization: `Bearer ${userInfo?.token.access_token}`,
+                      Authorization: `Bearer ${userInfo?.token.refresh_token}`,
                     },
                   },
                 )
