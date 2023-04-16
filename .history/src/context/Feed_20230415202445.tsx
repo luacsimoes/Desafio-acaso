@@ -13,7 +13,6 @@ import Toast from 'react-native-toast-message';
 import { useNavigation } from '@react-navigation/native';
 import { BASE_URL } from '@/config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useQuery } from 'react-query';
 
 export type FeedType = {
   id: string;
@@ -40,18 +39,19 @@ type FeedContextValue = {
   profilePicture: string;
   feed: FeedType[];
   fetchProfilePicture: () => void;
-  refetchFeed: () => void;
+  fetchFeed: () => void;
 };
 
 export const FeedContext = createContext<FeedContextValue>({
   profilePicture: '',
   feed: [],
   fetchProfilePicture: () => {},
-  refetchFeed: () => {},
+  fetchFeed: () => {},
 });
 
 const FeedProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
   const [profilePicture, setProfilePicture] = useState<string>('');
+  const [feed, setFeed] = useState<FeedType[]>([]);
   const { userInfo } = useContext(AuthContext);
   const navigation = useNavigation();
 
@@ -73,44 +73,30 @@ const FeedProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
     }
   }, [userInfo]);
 
-  const { data: feed, refetch: refetchFeed } = useQuery<FeedType[]>(
-    'feed',
-    async () => {
+  const fetchFeed = useCallback(async () => {
+    try {
       const response = await axios.get(`${BASE_URL}/feed`, {
         headers: {
           Authorization: `Bearer ${userInfo?.token.id_token}`,
         },
       });
-      AsyncStorage.setItem('feed', JSON.stringify(response.data));
-      return response.data;
-    },
-    {
-      enabled: !!userInfo,
-      refetchOnWindowFocus: false,
-      onError: (error: any) => {
-        console.error(error);
-        Toast.show({
-          type: 'error',
-          text1: 'Erro ao buscar feed',
-        });
-      },
-    },
-  );
-
-  useEffect(() => {
-    if (userInfo) {
-      fetchProfilePicture();
+      setFeed(response.data);
+      AsyncStorage.setItem('feed', JSON.stringify(feed));
+    } catch (error: any) {
+      console.error(error);
+      Toast.show({
+        type: 'error',
+        text1: 'Erro ao buscar feed',
+      });
     }
-  }, [fetchProfilePicture, userInfo]);
+  }, [userInfo, feed]);
 
   const contextValue = useMemo(() => {
     return {
       profilePicture,
-      feed: feed || [],
-      fetchProfilePicture,
-      refetchFeed,
+      feed,
     };
-  }, [profilePicture, feed, fetchProfilePicture, refetchFeed]);
+  }, [profilePicture, feed]);
 
   return (
     <FeedContext.Provider value={contextValue}>{children}</FeedContext.Provider>

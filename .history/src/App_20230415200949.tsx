@@ -3,15 +3,12 @@ import { NavigationContainer } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
-import { QueryClient, QueryClientProvider } from 'react-query';
 import ThemeProvider from './Theme/ThemeProvider';
 import { AuthProvider, AuthContext } from './context/Auth';
 import Route from './routes';
 import FeedProvider from './context/Feed';
 import { toastConfig } from './Toast/toastConfig';
 import { BASE_URL } from './config';
-
-const queryClient = new QueryClient();
 
 export const App = () => {
   const { userInfo, setUserInfo } = useContext(AuthContext);
@@ -63,18 +60,16 @@ export const App = () => {
   defineInterceptor();
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider>
-        <NavigationContainer>
-          <AuthProvider>
-            <FeedProvider>
-              <Route />
-            </FeedProvider>
-          </AuthProvider>
-        </NavigationContainer>
-        <Toast config={toastConfig} />
-      </ThemeProvider>
-    </QueryClientProvider>
+    <ThemeProvider>
+      <NavigationContainer>
+        <AuthProvider>
+          <FeedProvider>
+            <Route />
+          </FeedProvider>
+        </AuthProvider>
+      </NavigationContainer>
+      <Toast config={toastConfig} />
+    </ThemeProvider>
   );
 };
 

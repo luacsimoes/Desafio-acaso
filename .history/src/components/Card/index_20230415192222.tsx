@@ -1,6 +1,12 @@
 import React, { useContext } from 'react';
 import { FeedContext, FeedType } from '@/context/Feed';
-import { View, Text, Image } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  ImageSourcePropType,
+} from 'react-native';
 
 interface CardProps {
   feedItem: FeedType;
@@ -11,7 +17,7 @@ const Card: React.FC<CardProps> = ({ feedItem }) => {
   return (
     <View>
       <View>
-        <Image source={{ uri: feedItem.data.microverse.profile_picture }} />
+        <Image source={{ uri: feed?.data.microverse.profile_picture }} />
         <Text>{name}</Text>
       </View>
       <View>
@@ -24,5 +30,3 @@ const Card: React.FC<CardProps> = ({ feedItem }) => {
     </View>
   );
 };
-
-export default Card;

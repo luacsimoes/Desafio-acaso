@@ -24,5 +24,3 @@ const Card: React.FC<CardProps> = ({ feedItem }) => {
     </View>
   );
 };
-
-export default Card;

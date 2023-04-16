@@ -3,15 +3,12 @@ import { NavigationContainer } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
-import { QueryClient, QueryClientProvider } from 'react-query';
 import ThemeProvider from './Theme/ThemeProvider';
 import { AuthProvider, AuthContext } from './context/Auth';
 import Route from './routes';
 import FeedProvider from './context/Feed';
 import { toastConfig } from './Toast/toastConfig';
 import { BASE_URL } from './config';
-
-const queryClient = new QueryClient();
 
 export const App = () => {
   const { userInfo, setUserInfo } = useContext(AuthContext);
@@ -38,21 +35,14 @@ export const App = () => {
           await AsyncStorage.setItem('access_token', res.data.access_token);
           await AsyncStorage.setItem('id_token', res.data.id_token);
           originalReq.headers.Authorization = `Bearer ${res.data.access_token}`;
-          setUserInfo((userInfo) => {
-            if (userInfo) {
-              const { access_token, id_token } = res.data;
-              return {
-                token: {
-                  access_token,
-                  id_token,
-                  refresh_token: userInfo.token.refresh_token,
-                },
-                user: userInfo.user,
-              };
-            }
-            return undefined;
-          });
-          AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
+          setUserInfo((prevState) => ({
+            ...prevState,
+            token: {
+              ...prevState.token,
+              access_token: res.data.access_token,
+            },
+          }));
+
           return axios(originalReq);
         }
         throw err;
@@ -63,18 +53,16 @@ export const App = () => {
   defineInterceptor();
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider>
-        <NavigationContainer>
-          <AuthProvider>
-            <FeedProvider>
-              <Route />
-            </FeedProvider>
-          </AuthProvider>
-        </NavigationContainer>
-        <Toast config={toastConfig} />
-      </ThemeProvider>
-    </QueryClientProvider>
+    <ThemeProvider>
+      <NavigationContainer>
+        <AuthProvider>
+          <FeedProvider>
+            <Route />
+          </FeedProvider>
+        </AuthProvider>
+      </NavigationContainer>
+      <Toast config={toastConfig} />
+    </ThemeProvider>
   );
 };
 
