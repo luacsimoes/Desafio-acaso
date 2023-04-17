@@ -1,5 +1,5 @@
 import React from 'react';
-import { FeedType, FeedContext } from '@/context/Feed';
+import { FeedType } from '@/context/Feed';
 import { View, Text, Image } from 'react-native';
 
 interface CardProps {

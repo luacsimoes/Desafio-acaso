@@ -56,6 +56,8 @@ export const App = () => {
         }
 
         signOut();
+
+        throw err;
       },
     );
   };

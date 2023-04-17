@@ -13,7 +13,8 @@ import { BASE_URL } from './config';
 const queryClient = new QueryClient();
 
 export const App = () => {
-  const { userInfo, setUserInfo, signOut } = useContext(AuthContext);
+  const { userInfo, setUserInfo } = useContext(AuthContext);
+  const { signOut } = useContext(AuthContext);
 
   const defineInterceptor = () => {
     axios.interceptors.response.use(
@@ -54,11 +55,15 @@ export const App = () => {
           AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
           return axios(originalReq);
         }
-
-        signOut();
+        // Adicione este bloco para chamar a função signOut
+        else (err.response.status === 401 && err.config && err.config.retry) {
+          signOut();
+        }
+        throw err;
       },
     );
   };
+
   defineInterceptor();
 
   return (

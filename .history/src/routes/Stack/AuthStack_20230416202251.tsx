@@ -8,15 +8,13 @@ const Stack = createNativeStackNavigator();
 
 const AuthStack = () => {
   return (
-    <FeedProvider>
-      <Stack.Navigator
-        initialRouteName="Feed"
-        screenOptions={{ headerShown: false }}
-      >
-        <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
-        <Stack.Screen name="Feed" component={Feed} />
-      </Stack.Navigator>
-    </FeedProvider>
+    <Stack.Navigator
+      initialRouteName="Feed"
+      screenOptions={{ headerShown: false }}
+    >
+      <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+      <Stack.Screen name="Feed" component={Feed} />
+    </Stack.Navigator>
   );
 };
 

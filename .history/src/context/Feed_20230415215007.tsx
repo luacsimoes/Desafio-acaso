@@ -1,0 +1,127 @@
+import React, {
+  createContext,
+  ReactNode,
+  useState,
+  useMemo,
+  useCallback,
+  useEffect,
+  useContext,
+} from 'react';
+import axios from 'axios';
+import { AuthContext } from '@/context/Auth';
+import Toast from 'react-native-toast-message';
+import { useNavigation } from '@react-navigation/native';
+import { BASE_URL } from '@/config';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useQuery, useInfiniteQuery } from 'react-query';
+
+export type FeedItemType = {
+  id: string;
+  created_at: string;
+  updated_at: string;
+  type: string;
+  data: {
+    id: string;
+    name: string;
+    subscribed: true;
+    initial_hour: string;
+    microverse: {
+      id: string;
+      name: string;
+      profile_picture: string;
+      primary_color: string;
+      secondary_color: string;
+      highlight_color: string;
+    };
+  };
+};
+
+export type FeedType = {
+  has_next: boolean;
+  data: FeedItemType[];
+};
+
+export type FeedContextValue = {
+  profilePicture: string;
+  feed: FeedItemType[] | undefined;
+  fetchProfilePicture: () => void;
+  fetchMoreFeed: () => void;
+};
+
+export const FeedContext = createContext<FeedContextValue>({
+  profilePicture: '',
+  feed: undefined,
+  fetchProfilePicture: () => {},
+  fetchMoreFeed: () => {},
+});
+
+const FeedProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
+  const [profilePicture, setProfilePicture] = useState<string>('');
+  const { userInfo } = useContext(AuthContext);
+  const navigation = useNavigation();
+
+  const fetchProfilePicture = useCallback(async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/user/profile`, {
+        headers: {
+          Authorization: `Bearer ${userInfo?.token.id_token}`,
+        },
+      });
+      setProfilePicture(response.data.profile_picture);
+    } catch (error: any) {
+      if (error.response?.status === 404) {
+        console.log('oi');
+        setProfilePicture('');
+      } else {
+        console.error('oi');
+      }
+    }
+  }, [userInfo]);
+
+  const {
+    data: feed = undefined,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    status,
+  } = useInfiniteQuery<FeedType>(
+    'feed',
+    async ({ pageParam = 1 }) => {
+      const response = await axios.get(`${BASE_URL}/feed?page=${pageParam}`, {
+        headers: {
+          Authorization: `Bearer ${userInfo?.token.id_token}`,
+        },
+      });
+      return response.data;
+    },
+    {
+      enabled: !!userInfo,
+      getNextPageParam: (lastPage, allPages) =>
+        lastPage.has_next ? allPages.length + 1 : undefined,
+      onError: (error: any) => {
+        console.error(error);
+        Toast.show({
+          type: 'error',
+          text1: 'Erro ao buscar feed',
+        });
+      },
+    },
+  );
+
+  useEffect(() => {
+    if (userInfo) {
+      fetchProfilePicture();
+    }
+  }, [fetchProfilePicture, userInfo]);
+
+  const feedItems = useMemo(() => {
+    if (!feed) return [];
+
+    return feed.pages.flatMap((page) => page.data);
+  }, [feed]);
+
+  const contextValue = useMemo(() => {
+    return {
+      profilePicture,
+      feed: feedItems,
+      fetchProfilePicture

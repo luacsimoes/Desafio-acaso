@@ -8,11 +8,14 @@ import React, {
   useContext,
 } from 'react';
 import axios from 'axios';
-import { useInfiniteQuery } from 'react-query';
 import { AuthContext } from '@/context/Auth';
+import Toast from 'react-native-toast-message';
+import { useNavigation } from '@react-navigation/native';
 import { BASE_URL } from '@/config';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useQuery } from 'react-query';
 
-export type FeedType = {
+export type FeedItemType = {
   id: string;
   created_at: string;
   updated_at: string;
@@ -31,34 +34,31 @@ export type FeedType = {
       highlight_color: string;
     };
   };
+};
+
+export type FeedType = {
   has_next: boolean;
+  data: FeedItemType[];
 };
 
 export type FeedContextValue = {
   profilePicture: string;
-  data: FeedType[] | undefined;
-  fetchProfilePicture?: () => void;
-  isLoading: boolean;
-  fetchNextPage?: () => void;
-  refetch?: () => void;
-  hasNextPage: boolean | undefined;
-  isFetchingNextPage: boolean;
+  feed: FeedType | undefined;
+  fetchProfilePicture: () => void;
+  refetchFeed: () => void;
 };
 
 export const FeedContext = createContext<FeedContextValue>({
   profilePicture: '',
-  data: undefined,
-  fetchProfilePicture: undefined,
-  isLoading: false,
-  fetchNextPage: undefined,
-  refetch: undefined,
-  hasNextPage: undefined,
-  isFetchingNextPage: false,
+  feed: undefined,
+  fetchProfilePicture: () => {},
+  refetchFeed: () => {},
 });
 
 const FeedProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
   const [profilePicture, setProfilePicture] = useState<string>('');
   const { userInfo } = useContext(AuthContext);
+  const navigation = useNavigation();
 
   const fetchProfilePicture = useCallback(async () => {
     try {
@@ -70,42 +70,37 @@ const FeedProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
       setProfilePicture(response.data.profile_picture);
     } catch (error: any) {
       if (error.response?.status === 404) {
-        console.log('fetchProfilePicture');
+        console.log('oi');
         setProfilePicture('');
       } else {
-        console.error('else profile');
+        console.error('oi');
       }
     }
   }, [userInfo]);
 
-  useEffect(() => {
-    console.log(userInfo);
-  }, [userInfo]);
-
-  const getPosts = async (page = 1) => {
-    const response = await axios.get(`${BASE_URL}/feed?page=${page}`, {
-      headers: {
-        Authorization: `Bearer ${userInfo?.token.id_token}`,
-      },
-    });
-    console.log(response.data, 'getPosts');
-    return response.data;
-  };
-
-  const {
-    data,
-    isLoading,
-    fetchNextPage,
-    refetch,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useInfiniteQuery(['posts'], ({ pageParam }) => getPosts(pageParam), {
-    getNextPageParam: (lastPage, allPages) => {
-      return lastPage[lastPage.length - 1].has_next
-        ? allPages.length + 1
-        : undefined;
+  const { data: feed = undefined, refetch: refetchFeed } = useQuery<FeedType>(
+    'feed',
+    async () => {
+      const response = await axios.get(`${BASE_URL}/feed`, {
+        headers: {
+          Authorization: `Bearer ${userInfo?.token.id_token}`,
+        },
+      });
+      AsyncStorage.setItem('feed', JSON.stringify(response.data));
+      return response.data;
     },
-  });
+    {
+      enabled: !!userInfo,
+      refetchOnWindowFocus: false,
+      onError: (error: any) => {
+        console.error(error);
+        Toast.show({
+          type: 'error',
+          text1: 'Erro ao buscar feed',
+        });
+      },
+    },
+  );
 
   useEffect(() => {
     if (userInfo) {
@@ -114,27 +109,13 @@ const FeedProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
   }, [fetchProfilePicture, userInfo]);
 
   const contextValue = useMemo(() => {
-    const adaptedData = data?.pages?.flatMap((page) => page.data) || [];
     return {
       profilePicture,
-      data: adaptedData,
+      feed,
       fetchProfilePicture,
-      isLoading,
-      isFetchingNextPage,
-      hasNextPage,
-      refetch,
-      fetchNextPage,
+      refetchFeed,
     };
-  }, [
-    profilePicture,
-    data?.pages,
-    fetchProfilePicture,
-    isFetchingNextPage,
-    isLoading,
-    hasNextPage,
-    refetch,
-    fetchNextPage,
-  ]);
+  }, [profilePicture, feed, fetchProfilePicture, refetchFeed]);
 
   return (
     <FeedContext.Provider value={contextValue}>{children}</FeedContext.Provider>

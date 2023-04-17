@@ -54,8 +54,10 @@ export const App = () => {
           AsyncStorage.setItem('userInfo', JSON.stringify(userInfo));
           return axios(originalReq);
         }
-
-        signOut();
+        if (err.response.status === 401 && err.config && err.config.retry) {
+          signOut();
+        }
+        throw err;
       },
     );
   };

@@ -91,10 +91,6 @@ export const AuthProvider: React.FC<{ children?: ReactNode }> = ({
     [navigation],
   );
 
-  useEffect(() => {
-    console.log(userInfo);
-  }, [userInfo]);
-
   const contextValue = useMemo(() => {
     return {
       signIn,

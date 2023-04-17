@@ -99,7 +99,7 @@ const FeedProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
     refetch,
     hasNextPage,
     isFetchingNextPage,
-  } = useInfiniteQuery(['posts'], ({ pageParam }) => getPosts(pageParam), {
+  } = useInfiniteQuery('posts', ({ pageParam }) => getPosts(pageParam), {
     getNextPageParam: (lastPage, allPages) => {
       return lastPage[lastPage.length - 1].has_next
         ? allPages.length + 1

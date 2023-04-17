@@ -6,6 +6,7 @@ import { Container, Header, AcasoLogo, ProfilePicture } from './styles';
 
 const Feed = () => {
   const { data, profilePicture } = useContext(FeedContext);
+
   const renderItem = ({ item }: { item: FeedType }) => <Card feedItem={item} />;
 
   useEffect(() => {

@@ -37,23 +37,13 @@ export type FeedType = {
 export type FeedContextValue = {
   profilePicture: string;
   data: FeedType[] | undefined;
-  fetchProfilePicture?: () => void;
-  isLoading: boolean;
-  fetchNextPage?: () => void;
-  refetch?: () => void;
-  hasNextPage: boolean | undefined;
-  isFetchingNextPage: boolean;
+  fetchProfilePicture: () => void;
 };
 
 export const FeedContext = createContext<FeedContextValue>({
   profilePicture: '',
   data: undefined,
-  fetchProfilePicture: undefined,
-  isLoading: false,
-  fetchNextPage: undefined,
-  refetch: undefined,
-  hasNextPage: undefined,
-  isFetchingNextPage: false,
+  fetchProfilePicture: () => {},
 });
 
 const FeedProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
@@ -70,26 +60,22 @@ const FeedProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
       setProfilePicture(response.data.profile_picture);
     } catch (error: any) {
       if (error.response?.status === 404) {
-        console.log('fetchProfilePicture');
+        console.log('oi');
         setProfilePicture('');
       } else {
-        console.error('else profile');
+        console.error('oi');
       }
     }
   }, [userInfo]);
 
-  useEffect(() => {
-    console.log(userInfo);
-  }, [userInfo]);
-
-  const getPosts = async (page = 1) => {
-    const response = await axios.get(`${BASE_URL}/feed?page=${page}`, {
+  const getPosts = async ({ pageParam = 1 }) => {
+    const response = await axios.get(`${BASE_URL}/feed`, {
       headers: {
         Authorization: `Bearer ${userInfo?.token.id_token}`,
       },
+      params: { page: pageParam },
     });
-    console.log(response.data, 'getPosts');
-    return response.data;
+    return { pages: [response.data] };
   };
 
   const {
@@ -99,12 +85,13 @@ const FeedProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
     refetch,
     hasNextPage,
     isFetchingNextPage,
-  } = useInfiniteQuery(['posts'], ({ pageParam }) => getPosts(pageParam), {
+  } = useInfiniteQuery(['posts'], getPosts, {
     getNextPageParam: (lastPage, allPages) => {
       return lastPage[lastPage.length - 1].has_next
         ? allPages.length + 1
         : undefined;
     },
+    return posts
   });
 
   useEffect(() => {
@@ -114,27 +101,12 @@ const FeedProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
   }, [fetchProfilePicture, userInfo]);
 
   const contextValue = useMemo(() => {
-    const adaptedData = data?.pages?.flatMap((page) => page.data) || [];
     return {
       profilePicture,
-      data: adaptedData,
+      data: data?.pages?.flat(),
       fetchProfilePicture,
-      isLoading,
-      isFetchingNextPage,
-      hasNextPage,
-      refetch,
-      fetchNextPage,
     };
-  }, [
-    profilePicture,
-    data?.pages,
-    fetchProfilePicture,
-    isFetchingNextPage,
-    isLoading,
-    hasNextPage,
-    refetch,
-    fetchNextPage,
-  ]);
+  }, [profilePicture, data?.pages, fetchProfilePicture]);
 
   return (
     <FeedContext.Provider value={contextValue}>{children}</FeedContext.Provider>

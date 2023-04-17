@@ -37,10 +37,10 @@ export type FeedType = {
 export type FeedContextValue = {
   profilePicture: string;
   data: FeedType[] | undefined;
-  fetchProfilePicture?: () => void;
+  fetchProfilePicture: () => void;
   isLoading: boolean;
-  fetchNextPage?: () => void;
-  refetch?: () => void;
+  fetchNextPage: () => void;
+  refetch: () => void;
   hasNextPage: boolean | undefined;
   isFetchingNextPage: boolean;
 };
@@ -48,10 +48,10 @@ export type FeedContextValue = {
 export const FeedContext = createContext<FeedContextValue>({
   profilePicture: '',
   data: undefined,
-  fetchProfilePicture: undefined,
+  fetchProfilePicture: () => {},
   isLoading: false,
-  fetchNextPage: undefined,
-  refetch: undefined,
+  fetchNextPage: () => {},
+  refetch: Promise<void>,
   hasNextPage: undefined,
   isFetchingNextPage: false,
 });
@@ -70,16 +70,12 @@ const FeedProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
       setProfilePicture(response.data.profile_picture);
     } catch (error: any) {
       if (error.response?.status === 404) {
-        console.log('fetchProfilePicture');
+        console.log('oi');
         setProfilePicture('');
       } else {
-        console.error('else profile');
+        console.error('oi');
       }
     }
-  }, [userInfo]);
-
-  useEffect(() => {
-    console.log(userInfo);
   }, [userInfo]);
 
   const getPosts = async (page = 1) => {
@@ -88,7 +84,6 @@ const FeedProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
         Authorization: `Bearer ${userInfo?.token.id_token}`,
       },
     });
-    console.log(response.data, 'getPosts');
     return response.data;
   };
 
@@ -99,7 +94,7 @@ const FeedProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
     refetch,
     hasNextPage,
     isFetchingNextPage,
-  } = useInfiniteQuery(['posts'], ({ pageParam }) => getPosts(pageParam), {
+  } = useInfiniteQuery('posts', ({ pageParam }) => getPosts(pageParam), {
     getNextPageParam: (lastPage, allPages) => {
       return lastPage[lastPage.length - 1].has_next
         ? allPages.length + 1

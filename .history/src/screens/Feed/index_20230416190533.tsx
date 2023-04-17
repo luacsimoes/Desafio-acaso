@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { FeedContext, FeedType } from '@/context/Feed';
 import { View, Text, Image, FlatList } from 'react-native';
 import Card from '@/components/Card';
@@ -6,11 +6,8 @@ import { Container, Header, AcasoLogo, ProfilePicture } from './styles';
 
 const Feed = () => {
   const { data, profilePicture } = useContext(FeedContext);
-  const renderItem = ({ item }: { item: FeedType }) => <Card feedItem={item} />;
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
+  const renderItem = ({ item }: { item: FeedType }) => <Card feedItem={item} />;
 
   return (
     <Container>
@@ -22,13 +19,11 @@ const Feed = () => {
           <ProfilePicture source={require('./images/defaultimage.jpg')} />
         )}
       </Header>
-      <View>
-        <FlatList
-          data={data}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={renderItem}
-        />
-      </View>
+      <FlatList
+        data={data}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={renderItem}
+      />
     </Container>
   );
 };

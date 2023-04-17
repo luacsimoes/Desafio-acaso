@@ -4,7 +4,7 @@ import React, {
   useState,
   useMemo,
   useCallback,
-  useEffect,
+  useEffect
 } from 'react';
 import axios from 'axios';
 import Toast from 'react-native-toast-message';
@@ -92,7 +92,8 @@ export const AuthProvider: React.FC<{ children?: ReactNode }> = ({
   );
 
   useEffect(() => {
-    console.log(userInfo);
+console.log(userInfo)
+    }
   }, [userInfo]);
 
   const contextValue = useMemo(() => {

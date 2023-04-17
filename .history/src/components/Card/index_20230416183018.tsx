@@ -7,15 +7,16 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({ feedItem }) => {
+  const { data } = useContext(FeedContext);
   return (
     <View>
       <View>
-        <Image source={{ uri: feedItem?.data.microverse.profile_picture }} />
-        <Text>{feedItem?.data.microverse.name}</Text>
+        <Image source={{ uri: data?.data.microverse.profile_picture }} />
+        <Text>{data?.data.microverse.name}</Text>
       </View>
       <View>
-        <Text>{feedItem?.type}</Text>
-        <Text>{feedItem?.created_at}</Text>
+        <Text>{data?.type}</Text>
+        <Text>{data?.created_at}</Text>
       </View>
       <View>
         <Text>Footer</Text>
